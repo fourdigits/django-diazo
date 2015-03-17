@@ -51,6 +51,7 @@ class DjangoDiazoMiddleware(object):
                         rules=rules_file,
                         prefix=theme.theme_url(),
                         doctype=DOCTYPE,
+                        read_network=theme.read_network,
                     )
                     compiled_theme = self.diazo.compile_theme()
                     self.transform = etree.XSLT(compiled_theme, access_control=self.diazo.access_control)

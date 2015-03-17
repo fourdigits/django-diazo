@@ -64,7 +64,14 @@ class Theme(models.Model):
                 format(settings.MEDIA_ROOT), 'themes', str(self.pk),
                 self.prefix if include_prefix else '')
 
+
+    @property
+    def read_network(self):
+        return self.prefix[:6] in ('ftp://', 'http:/', 'https:')
+
     def theme_url(self):
+        if self.read_network:
+            return self.prefix
         if self.builtin:
             return self.url
         else:
