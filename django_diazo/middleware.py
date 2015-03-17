@@ -36,7 +36,7 @@ class DjangoDiazoMiddleware(object):
                 rules_file = os.path.join(theme.theme_path(), 'rules.xml')
                 if theme.id != self.theme_id or not os.path.exists(rules_file) or theme.debug:
                     if not theme.builtin:
-                        if theme.rules:
+                        if rules_file:
                             fp = open(rules_file, 'w')
                             try:
                                 fp.write(theme.rules.serialize())
@@ -68,8 +68,8 @@ class DjangoDiazoMiddleware(object):
                         response = HttpResponse()
                     else:
                         parser = etree.HTMLParser(remove_blank_text=True, remove_comments=True)
-                        content = etree.fromstring(response.content, parser)
-                    result = self.transform(content.decode('utf-8'), **self.params)
+                        content = etree.fromstring(response.content.decode('utf-8'), parser)
+                    result = self.transform(content, **self.params)
                     response.content = XMLSerializer(result, doctype=DOCTYPE).serialize()
                 except Exception, e:
                     getLogger('django_diazo').error(e)
